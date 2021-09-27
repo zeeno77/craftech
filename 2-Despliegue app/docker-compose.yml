@@ -1,0 +1,54 @@
+version: '2'
+
+services:
+    frontend: 
+        restart: unless-stopped
+        build:
+            context: ./
+            dockerfile: ./Docker/frontend/Dockerfile
+        volumes:
+            - static_volume:/app/assets
+        ports:
+            - 80:80
+        networks: 
+            - craftech-interview
+        depends_on: 
+            - backend
+    backend:
+        restart: unless-stopped
+        build:
+            context: ./
+            dockerfile: ./Docker/backend/Dockerfile
+        volumes:
+            - static_volume:/app/assets
+        environment:
+            - SECRET_KEY=kKZTp39JgXXe4kcp
+            - DB_ENGINE=django.db.backends.postgresql
+            - DB_NAME=craftech-db
+            - DB_USER=craftech-admin
+            - DB_PASS=k4quqNWPx2rLrX8L
+            - DB_HOST=db
+            - DB_PORT=5432
+        ports:
+            - 8000:8000
+        networks: 
+            - craftech-interview
+        depends_on: 
+            - db
+    db:
+        image: postgres:13.0-alpine
+        restart: unless-stopped
+        volumes:
+            - postgres_data:/tmp/postgresql/data/
+        environment:
+            - POSTGRES_USER=craftech-admin
+            - POSTGRES_PASSWORD=k4quqNWPx2rLrX8L
+            - POSTGRES_DB=craftech-db
+        networks: 
+            - craftech-interview
+volumes:
+    postgres_data:
+    static_volume: {}
+
+networks: 
+    craftech-interview:

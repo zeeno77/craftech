@@ -10,5 +10,5 @@ To deploy the app on AWS:
 2- Configure your Amazon credentials  
 3- Create new docker context for ecs  
    docker context create ecs "myContextName"   
-4- docker context use myContextName
+4- docker context use myContextName  
 5- docker-compose up  
